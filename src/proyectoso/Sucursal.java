@@ -5,18 +5,10 @@
  */
 package proyectoso;
 
-import java.util.concurrent.Semaphore;
-
 /**
  *
  * @author Jesus Barrios
  */
-public class Cliente extends Thread {
-    Semaphore sem;
-    String id;
-    Cliente(Semaphore sem, String id){
-        super(id);
-        this.sem = sem; 
-        this.id = id;
-    }
+public class Sucursal {
+    
 }
