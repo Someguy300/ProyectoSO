@@ -9,14 +9,6 @@ package proyectoso;
  *
  * @author Jesus Barrios
  */
-public class ProyectoSO {
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
-        System.out.println("Hello");
-    }
+public class Cliente {
     
 }
