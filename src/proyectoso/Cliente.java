@@ -13,10 +13,14 @@ import java.util.concurrent.Semaphore;
  */
 public class Cliente extends Thread {
     Semaphore sem;
-    String id;
-    Cliente(Semaphore sem, String id){
-        super(id);
+    int id;
+    Cliente(Semaphore sem, int id){
         this.sem = sem; 
         this.id = id;
+    }
+    
+    @Override
+    public void run(){
+        
     }
 }
