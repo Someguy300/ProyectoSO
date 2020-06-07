@@ -5,6 +5,9 @@
  */
 package proyectoso;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 /**
  *
  * @author Jesus Barrios
@@ -16,7 +19,24 @@ public class ProyectoSO {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        System.out.println("Hello");
+//        Queue cola=new LinkedList();
+//        /*Insertamos datos*/
+//            cola.add(3);
+//            cola.add(14);
+//            cola.add(12);
+//            cola.add(7);
+//            cola.add(10);
+//        /*Impresion de la Cola llena con los datos*/
+//        System.out.println("Cola llena: " + cola);
+//        /*Estructura repetitiva para desencolar*/
+//        while(cola.peek()!=null){
+//            System.out.println(cola.poll());
+//        }
+
+        Control app = new Control();
+        app.iniciar();
+        
+                
     }
     
 }

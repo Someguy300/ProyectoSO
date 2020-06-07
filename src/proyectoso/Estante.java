@@ -5,10 +5,21 @@
  */
 package proyectoso;
 
+import java.util.concurrent.Semaphore;
+
 /**
  *
  * @author Jesus Barrios
  */
-public class Estantes {
+public class Estante {
+    int productos,random;
+    Semaphore usuario;
+    
+    public Estante(){
+        this.productos = 10;
+        usuario = new Semaphore(1, true);
+    }
+    
+    
     
 }
