@@ -13,7 +13,7 @@ import java.util.concurrent.Semaphore;
  */
 public class Cliente extends Thread {
     
-    Semaphore semC, semP;
+    Semaphore semC, semP,semE;
     
     Estante est1,est2,est3;
     
@@ -25,10 +25,11 @@ public class Cliente extends Thread {
         this.id = id;
         this.nroItems = 0;
         this.total = 0;
-        this.semC = null;
         this.est1=null;
         this.est2=null;
         this.est3=null;
+        this.semC = null;
+        this.semE= null;
         this.semP=null;
         this.nuevo = true;
     }
@@ -37,68 +38,68 @@ public class Cliente extends Thread {
     public void run(){
         try {
                 
-                /*Se verifica de que haya carritos disponibles, de no
-                  haber carritos disponibles el cliente lo indica y espera
-                */
-                if(semC.availablePermits()==0){
-                    System.out.println(this.id+" dice: No hay carritos, voy a esperar");
-                }
-                
-                this.entra();
-                this.semC.acquire();
-                
-                System.out.println(this.id+" dice: agarre un carrito");
+            /*Se verifica de que haya carritos disponibles, de no
+              haber carritos disponibles el cliente lo indica y espera
+            */
+            if(semC.availablePermits()==0){
+                System.out.println(this.id+" dice: No hay carritos, voy a esperar");
+            }
+
+            this.entra();
+            this.semC.acquire();
+
+            System.out.println(this.id+" dice: agarre un carrito");
+            System.out.println("-----------------");
+            System.out.println(this.id+" dice: Voy al estante 1");
+
+            Thread.sleep(5000);
+
+            est1.get(this);
+
+            if(est2!=null){
                 System.out.println("-----------------");
-                System.out.println(this.id+" dice: Voy al estante 1");
-                
+                System.out.println(this.id+" dice: voy al estante 2");
                 Thread.sleep(5000);
-                
-                est1.get(this);
-                
-                if(est2!=null){
-                    System.out.println("-----------------");
-                    System.out.println(this.id+" dice: voy al estante 2");
-                    Thread.sleep(5000);
-                    est2.get(this);
-                }
-                
-                if(est3!=null){
-                    System.out.println("-----------------");
-                    System.out.println(this.id+" dice: voy al estante 3");
-                    Thread.sleep(5000);
-                    est3.get(this);
-                }
- 
-                /*Al igual que antes el cliente verifica y si no hay
-                permisos disponibles, avisa y espera*/
+                est2.get(this);
+            }
+
+            if(est3!=null){
                 System.out.println("-----------------");
-                System.out.println(this.id+" dice: Voy a caja");
-                System.out.println("-----------------");
+                System.out.println(this.id+" dice: voy al estante 3");
                 Thread.sleep(5000);
-                
-                if(semP.availablePermits()==0){
-                    System.out.println(this.id+" dice: Hay gente pagando, voy a esperar");
-                }
-                this.semP.acquire();
-                System.out.println(this.id+" dice: estoy pagando mis "+nroItems+" productos");
-                System.out.println("-----------------");
-                Thread.sleep(nroItems*50);
-                Thread.sleep(1000);
-                System.out.println(this.id+" dice: pague "+total+"$");
-                this.semP.release();
-                System.out.println("-----------------");
-                
-                
-                //El cliente hace el release del permiso para usar el carrito
-                //y por lo tanto deja el super
-                System.out.println(this.id+" dice: ya pague, voy a dejar el carrito");
-                System.out.println("-----------------");
-                Thread.sleep(2000);
-                this.semC.release();
-                System.out.println(this.id+" dice: solte el carrito");
-                System.out.println("-----------------");
-                System.out.println(this.id+" dice: adios");
-                System.out.println("-----------------");
+                est3.get(this);
+            }
+
+            /*Al igual que antes el cliente verifica y si no hay
+            permisos disponibles, avisa y espera*/
+            System.out.println("-----------------");
+            System.out.println(this.id+" dice: Voy a caja");
+            System.out.println("-----------------");
+            Thread.sleep(5000);
+
+            if(semP.availablePermits()==0){
+                System.out.println(this.id+" dice: Hay gente pagando, voy a esperar");
+            }
+            this.semP.acquire();
+            System.out.println(this.id+" dice: estoy pagando mis "+nroItems+" productos");
+            System.out.println("-----------------");
+            Thread.sleep(nroItems*50);
+            Thread.sleep(1000);
+            System.out.println(this.id+" dice: pague "+total+"$");
+            this.semP.release();
+            System.out.println("-----------------");
+
+
+            //El cliente hace el release del permiso para usar el carrito
+            //y por lo tanto deja el super
+            System.out.println(this.id+" dice: ya pague, voy a dejar el carrito");
+            System.out.println("-----------------");
+            Thread.sleep(2000);
+            this.semC.release();
+            System.out.println(this.id+" dice: solte el carrito");
+            System.out.println("-----------------");
+            System.out.println(this.id+" dice: adios");
+            System.out.println("-----------------");
                 
                 
                 
@@ -134,6 +135,14 @@ public class Cliente extends Thread {
 
     public void setTotal(int total) {
         this.total = total;
+    }
+
+    public Semaphore getSemE() {
+        return semE;
+    }
+
+    public void setSemE(Semaphore semE) {
+        this.semE = semE;
     }
 
     

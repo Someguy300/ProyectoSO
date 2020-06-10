@@ -15,23 +15,43 @@ import java.util.logging.Logger;
  */
 public class Empleado extends Thread {
     Estante estante;
+    Semaphore sem;
     
     Empleado(Estante estante){
         this.estante = estante;
+        this.sem = null;
     }
     
     @Override
     public void run(){
+        System.out.println("EMPLEADO ACTIVO");
         do {            
-            if(estante.getNroProd()<7){
-                System.out.println("YOOOOOOOOOOO");
-                estante.put();
+            try {
+                Thread.sleep(1000);
+                estante.put(this);
+            } catch (InterruptedException ex) {
+                System.out.println("ERROR");
             }
         } while (true);
         
         
         
-        
+    }
+
+    public Estante getEstante() {
+        return estante;
+    }
+
+    public void setEstante(Estante estante) {
+        this.estante = estante;
+    }
+
+    public Semaphore getSem() {
+        return sem;
+    }
+
+    public void setSem(Semaphore sem) {
+        this.sem = sem;
     }
 
     

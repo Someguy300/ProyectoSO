@@ -24,19 +24,21 @@ public class Estante {
     
     private int nroProd;
     
-    private Semaphore semS; 
+    private Semaphore semS,semN; 
     
     public Estante(int nroProd){
         this.nroProd = nroProd;
         this.cliente = null;
         this.semS = new Semaphore(1);
+        this.semN = new Semaphore(0);
     }
 
     
 
     void get(Cliente cliente) throws InterruptedException {
         if(nroProd!=0){
-            semS.acquire();
+            cliente.setSemE(semS);
+            cliente.getSemE().acquire();
             setCliente(cliente);
             System.out.println("-----------------");
             System.out.println(cliente.id+" dice: Estoy en el estante");
@@ -73,7 +75,7 @@ public class Estante {
 
             System.out.println("-----------------");
             System.out.println("PRODUCTOS RESTANTES:"+nroProd);
-            semS.release();
+            cliente.getSemE().release();
             setCliente(null);
             
         } else {
@@ -84,17 +86,22 @@ public class Estante {
         
     }
 
-    void put() {
-        try {
-            semS.acquire();
-        } catch (InterruptedException ex) {
-            System.out.println("ERROR PUT ESTANTE");
+    void put(Empleado empleado) throws InterruptedException {
+        if(empleado.getSem()==null){
+            empleado.setSem(semS);
         }
-        System.out.println("Empleado dice: voy a reponer mi estante");
-        //Meter codigo productor aqui
-        nroProd = nroProd+3;
-        semS.release();
         
+        if(nroProd<=7){
+            System.out.println("Empleado dice: Oh no el estante tiene que ser repuesto");
+            Thread.sleep(4000);
+            empleado.getSem().acquire();
+            System.out.println("Empleado dice: reponiendo estante");
+            empleado.sleep(1000);
+            System.out.println("Empleado dice: Estante repuesto con 3 productos");
+            nroProd = nroProd + 3;
+            System.out.println("PRODUCTOS RESTANTES: "+nroProd);
+            empleado.getSem().release();
+        } 
         
     }
 
