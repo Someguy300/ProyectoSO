@@ -17,22 +17,11 @@ public class ProyectoSO {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         // TODO code application logic here
-//        Queue cola=new LinkedList();
-//        /*Insertamos datos*/
-//            cola.add(3);
-//            cola.add(14);
-//            cola.add(12);
-//            cola.add(7);
-//            cola.add(10);
-//        /*Impresion de la Cola llena con los datos*/
-//        System.out.println("Cola llena: " + cola);
-//        /*Estructura repetitiva para desencolar*/
-//        while(cola.peek()!=null){
-//            System.out.println(cola.poll());
-//        }
-
+        /*BIENVENIDO AL MAIN, para mas info de como funciona este programa
+        ir primero a Control, despues de eso se convierte en ir clase
+        por clase viendo los comentarios*/
         Control app = new Control();
         app.iniciar();
         

@@ -14,9 +14,16 @@ import java.util.logging.Logger;
  * @author Jesus Barrios
  */
 public class Empleado extends Thread {
+    //Empleado encargado del estante con su estante y su semaforo
+    //para acceder a su estante para poner su cajita de productos
     Estante estante;
     Semaphore sem;
     
+    /*Cualquier duda el semaforo se asigna en la clase Estante...
+    se me olvido porque lo puse null...
+    creo que fue cuando tenia peos porque el programa no queria reconocer
+    la existencia del empleado asi que me puse a jugar con los semaforos a
+    ver que servia*/
     Empleado(Estante estante){
         this.estante = estante;
         this.sem = null;
@@ -24,19 +31,28 @@ public class Empleado extends Thread {
     
     @Override
     public void run(){
+        //verificacion para ver si el thread del empleado esta funcionando
         System.out.println("EMPLEADO ACTIVO");
+        /*Se me olvido que no se pueden borrar estantes asi que por eso
+        el while dice eso, se puede cambiar a true*/
         do {            
+            //Ver clase estante para mas detaller de los que hace estante.put(this)
+            //cualquier duda el this significa que le estoy pasando este empleado
             try {
-                Thread.sleep(1000);
+                //este sleep se lo puse porque al programa de daba embolia
+                //y hacia que el empleado no hiciera nada
+                Thread.sleep(100);
                 estante.put(this);
             } catch (InterruptedException ex) {
                 System.out.println("ERROR");
             }
-        } while (true);
+        } while (estante!=null);
         
         
         
     }
+    
+    //getters y setters
 
     public Estante getEstante() {
         return estante;
