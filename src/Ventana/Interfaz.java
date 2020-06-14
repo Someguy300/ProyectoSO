@@ -349,7 +349,8 @@ public class Interfaz extends javax.swing.JFrame {
                     "AVISO", JOptionPane.ERROR_MESSAGE);
         }else{
             app.getsClientes().release();
-            contCarritos.setText(Integer.toString(app.getsClientes().availablePermits()));    
+            contCarritos.setText(Integer.toString(app.getsClientes().availablePermits()));   
+            carDisp.setText(Integer.toString(app.getsClientes().availablePermits()));
         }
             
     
@@ -365,6 +366,7 @@ public class Interfaz extends javax.swing.JFrame {
             } else {
                 app.getsClientes().acquire();
                 contCarritos.setText(Integer.toString(app.getsClientes().availablePermits()));
+                carDisp.setText(Integer.toString(app.getsClientes().availablePermits()));
             }
         } catch (InterruptedException ex) {
             JOptionPane.showMessageDialog(null, "ERROR boton lessCarrito", 
@@ -374,12 +376,13 @@ public class Interfaz extends javax.swing.JFrame {
 
     private void plusCajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_plusCajaActionPerformed
         // TODO add your handling code here:
-        if(app.getsClientes().availablePermits()==app.getSucursal().getNroCajasMax()){
+        if(app.getsCajeros().availablePermits()==app.getSucursal().getNroCajasMax()){
             JOptionPane.showMessageDialog(null, "No hay mas cajas en esta sucursal", 
                     "AVISO", JOptionPane.ERROR_MESSAGE);
         } else{
             app.getsCajeros().release();
             contCajas.setText(Integer.toString(app.getsCajeros().availablePermits()));   
+            cajOp.setText(Integer.toString(Integer.parseInt(cajOp.getText())+1));
         }
         
     }//GEN-LAST:event_plusCajaActionPerformed
@@ -387,13 +390,13 @@ public class Interfaz extends javax.swing.JFrame {
     private void lessCajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lessCajaActionPerformed
         // TODO add your handling code here:
         try {
-            // TODO add your handling code here:
             if (app.getsCajeros().availablePermits()==app.getSucursal().getNroCajasMin()) {
-                app.getsCajeros().acquire();
-                contCajas.setText(Integer.toString(app.getsCajeros().availablePermits()));
-            }else {
                 JOptionPane.showMessageDialog(null, "No puede haber 0 cajas disponibles", 
                     "AVISO", JOptionPane.ERROR_MESSAGE);
+            }else {
+                app.getsCajeros().acquire();
+                contCajas.setText(Integer.toString(app.getsCajeros().availablePermits()));
+                cajOp.setText(Integer.toString(Integer.parseInt(cajOp.getText())-1));
             }
             
         } catch (InterruptedException ex) {

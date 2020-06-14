@@ -140,7 +140,6 @@ public class Archivo {
     
     
     
-    
     /*Esto en realidad no hace nada, lo tengo aqui por si
     se vuelve necesario usarlo, lo cual dudo*/
     /**

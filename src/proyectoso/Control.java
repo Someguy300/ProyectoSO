@@ -55,6 +55,7 @@ public class Control {
     static int carDisp;
     //cajas disponibles 
     static int cajDisp;
+    static int maxCar,maxCaj;
 
     
     public Control() throws InterruptedException {
@@ -72,6 +73,8 @@ public class Control {
         minuto = this.sucursal.getTiempo() / 60 * 1000;
         //El array en donde van a estar los estantes creados
         //su tamaño se determina de lo extraido del txt
+        maxCar = this.sucursal.getNroEstantesMax();
+        maxCaj = this.sucursal.getNroCajasMax();
         this.estantes = new Estante[this.sucursal.getNroEstantesMax()];
         //El semaforo que maneja cuantos clientes hay dentro del supermercado
         this.sClientes = new Semaphore(this.sucursal.getNroCarritosMax(), true);

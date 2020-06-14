@@ -131,7 +131,9 @@ public class Cliente extends Thread {
         Interfaz.ganancias
           .setText(Integer.toString(Integer.parseInt(Interfaz.ganancias.getText()) + this.total));
         //El cliente deja la caja
-        this.semP.release();
+        if(semP.availablePermits()<=Control.maxCaj){
+           semP.release(); 
+        }
         //Se modifican mas contadores en la interfaz
         Interfaz.clDes
           .setText(Integer.toString(Integer.parseInt(Interfaz.clDes.getText()) + 1));
@@ -141,14 +143,18 @@ public class Cliente extends Thread {
         //Los 2 min que tarda el cliente en dejar el carrito
         Thread.sleep((Control.minuto * 2));
         //deja ir el carritos
-        this.semC.release();
-        //Se modifican mas contadores en la interfaz
-        Interfaz.contCarritos
-          .setText(Integer.toString(Integer.parseInt(Interfaz.contCarritos.getText()) + 1));
-        Interfaz.carDisp
-          .setText(Integer.toString(Integer.parseInt(Interfaz.carDisp.getText()) + 1));
+        if(semC.availablePermits()<=Control.maxCar){
+            semC.release();
+            //Se modifican mas contadores en la interfaz
+            Interfaz.contCarritos
+              .setText(Integer.toString(Integer.parseInt(Interfaz.contCarritos.getText()) + 1));
+            Interfaz.carDisp
+              .setText(Integer.toString(Integer.parseInt(Interfaz.carDisp.getText()) + 1));
+        }
         Interfaz.contClientes
-          .setText(Integer.toString(Integer.parseInt(Interfaz.contClientes.getText()) - 1));
+              .setText(Integer.toString(Integer.parseInt(Interfaz.contClientes.getText()) - 1));
+        
+        
         //Verificaciones
         System.out.println(this.nro + " dice: solte el carrito,adios");
         System.out.println("-----------------");
