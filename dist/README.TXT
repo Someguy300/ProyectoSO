@@ -30,38 +30,3 @@ the projects runtime path.
 in the Projects window and choose Properties. Then click Run and enter the
 class name in the Main Class field. Alternatively, you can manually type the
 class name in the manifest Main-Class element.
-
------------------------------------------------
-COPIA SETTINGS.txt POR SI FALLA
------------------------------------------------
-
-Configuracion del programa
-No modificar nada a excepcion de los numeros
-Y en caso de modificar los numeros porfavor asegurarse
-de que sean mayores a 0
-
--Tiempo en segundos,que dura una hora en el programa
-tiempo=60*
-
--Numero de carritos iniciales
-carritosIni=10*
-
--Numero de estantes iniciales
-estantesIni=2*
-
--Numero de cajas registradoras operando
-cajas=4*
-
--Numero maximo de carritos
-maxCarritos=20*
-
--Numero maximo de estantes
-maxEstantes=3*
-
--Numero maximo de cajas registradoras permitidas
-maxCajas=7*
-
--Capacidad maxima de los estantes(No puede ser menor a 3)
-capEstantes=10*
-
-fin
