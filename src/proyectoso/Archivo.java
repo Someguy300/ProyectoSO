@@ -33,8 +33,33 @@ public class Archivo {
     BufferedWriter bufferedWriter;
     Sucursal sucursal;
     
+    /*Como lee el archivo el txt? facil, va linea por linea
+    y si detecta que una linea comienza con "-", salta a la siguiente
+    y agarra el dato que esta alli, ahora, no es que lee el nombre de
+    lo que esta alli(ej: tiempo=70*) y se lo asigna a la
+    variable correspondiente,nonono, el txt tiene que estar en un
+    orden especifico para poder trabajar, de lo contrario no se puede estar
+    seguro del funcionamiento del programa. A proposito el orden que debe 
+    tener el archivo es:
+        tiempo
+        carritosIni
+        estantesIni
+        cajas
+        maxCarritos
+        maxEstantes
+        maxCajas
+        capEstantes
+    Deberia poner algo en el readme de que si algo falla el usuario tiene que
+    reescribir el txt con ese orden...o simplemente pongo una copia del settings
+    en el readme*/
     
-    /*Metodo que carga los datos del archivo de texto*/
+    
+    
+    /**
+     * Metodo que carga los datos del archivo de texto de nombre
+     * settings.txt
+     * @return objeto Sucursal 
+     */
     public Sucursal cargarData(){
         //El array donde vamos a guardas los datos modificables del programa
         //para despues pasarselos a la clase Sucursal
@@ -69,7 +94,7 @@ public class Archivo {
                     cont++;
                 }
             }
-            //Se cierra el bufferedReader obligado
+            //Se cierra el bufferedReader
             bufferedReader.close();         
         }catch(FileNotFoundException ex) {
             JOptionPane.showMessageDialog(null, "No es posible abrir el archivo '" 
@@ -94,10 +119,16 @@ public class Archivo {
                     dataSuc[3], dataSuc[4], dataSuc[5], dataSuc[6], dataSuc[7]);
             } catch (Exception e) {
                 System.out.println("ERROR EN ARCHIVO, CARGANDO DEFAULT");
+                JOptionPane.showMessageDialog(null, "Error al leer el archivo,cargando datos por defecto '" 
+                    + nombreArchivo + "'", "NO SE PUDO LEER EL ARCHIVO", 
+                    JOptionPane.ERROR_MESSAGE);
                 sucursal = new Sucursal();
             }
         }else{
             System.out.println("ERROR EN ARCHIVO, CARGANDO DEFAULT");
+            JOptionPane.showMessageDialog(null, "Error al leer el archivo,cargando datos por defecto '" 
+                    + nombreArchivo + "'", "NO SE PUDO LEER EL ARCHIVO", 
+                    JOptionPane.ERROR_MESSAGE);
             sucursal = new Sucursal();
         }
             
@@ -112,6 +143,9 @@ public class Archivo {
     
     /*Esto en realidad no hace nada, lo tengo aqui por si
     se vuelve necesario usarlo, lo cual dudo*/
+    /**
+     * @deprecated 
+     */
     public void escribirArchivo(){
         nombreArchivo = "settings.txt";
         try {

@@ -8,30 +8,42 @@ package proyectoso;
 import Ventana.Interfaz;
 
 public class Gerente extends Thread {
-  int ganancias;
+  /*Clase gerente, su unica utilidad es "resetear" los contadores de horas
+    y ganancias*/
+    
+    //Jefe con las horas a "resetear"
+    Jefe jefe;
+
+    /**
+     * 
+     * @param jefe 
+     */
+    Gerente(Jefe jefe) {
+      this.jefe = jefe;
+    }
   
-  Jefe jefe;
-  
-  Gerente(Jefe jefe) {
-    this.jefe = jefe;
-    this.ganancias = 0;
-  }
-  
-  public void run() {
-    System.out.println("GERENTE ACTIVO");
-    try {
-      while (true) {
-        if (this.jefe.getHoras() == 8) {
-          this.jefe.setHoras(0);
-          Interfaz.horas.setText("0");
-          System.out.println("Gerente dice: reset a " + this.jefe.getHoras() + " horas");
-          this.ganancias = 0;
+  @Override
+    public void run() {
+        //sout de verificacion
+        System.out.println("GERENTE ACTIVO");
+        //trycatch obligatorio 
+        try {
+            //loop infinito
+            while (true) {
+                //Cuando pasen 8 horas, se resetean los contadores
+                if(this.jefe.getHoras() == 8) {
+                    this.jefe.setHoras(0);
+                    Interfaz.horas.setText("0");
+                    System.out.println("Gerente dice: reset a " + this.jefe.getHoras() + " horas");
+                    Interfaz.ganancias.setText("0");
+                } 
+                //si se quita esto el programa va a dejar de ejecutar
+                //este thread
+                Thread.sleep(100);
+            } 
+        } catch (InterruptedException ex) {
+            System.out.println("gerente se dio a la fuga");
+
         } 
-        Thread.sleep(100L);
-      } 
-    } catch (InterruptedException ex) {
-      System.out.println("gerente se dio a la fuga");
-      return;
-    } 
-  }
+    }
 }

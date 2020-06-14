@@ -24,7 +24,7 @@ public class Empleado extends Thread {
     creo que fue cuando tenia peos porque el programa no queria reconocer
     la existencia del empleado asi que me puse a jugar con los semaforos a
     ver que servia*/
-    Empleado(Estante estante){
+    public Empleado(Estante estante){
         this.estante = estante;
         this.sem = null;
     }

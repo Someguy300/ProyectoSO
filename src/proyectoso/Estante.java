@@ -20,9 +20,8 @@ public class Estante {
     //se va a agarrar
     int randomInt, randomCost;
     
-    private Empleado empleado;
     
-    private Cliente cliente;
+    
     
     //numero de productos en el estante y su capacidad
     //en un comienzo tienen el mismo valor
@@ -36,7 +35,6 @@ public class Estante {
     public Estante(int nroProd){
         this.nroProd = nroProd;
         this.cap = nroProd;
-        this.cliente = null;
         this.semS = new Semaphore(1);
     }
 
@@ -44,6 +42,11 @@ public class Estante {
     /*Este deberia ser el get de productor consumidor, por ahora..o para el
     momento de la entrega este proceso raro el cual estoy seguro no aplica 
     productor consumidor*/
+    /**
+     * Metodo para obtener productos del estante
+     * @param cliente thread que va a usar el estante
+     * @throws InterruptedException 
+     */
     void get(Cliente cliente) throws InterruptedException {
         /*El cliente puede(decidir)agarrar productos(el gafo igual puede decidir
         agarrar 0 productos), si no hay productos ve al "else" de este "if" 
@@ -53,9 +56,8 @@ public class Estante {
             cliente.setSemE(semS);
             //Se le pide permiso al semaforo para acceder al estante
             cliente.getSemE().acquire();
-            //y le damos a este estante su cliente para modificar su carrito
-            //con los productos que agarre y lo que tiene que pagar
-            setCliente(cliente);
+            
+            
             
             System.out.println("-----------------");
             System.out.println(cliente.getNro()+" dice: Estoy en el estante");
@@ -110,9 +112,7 @@ public class Estante {
             System.out.println("PRODUCTOS RESTANTES:"+nroProd);
             //el cliente deja ir el semaforo
             cliente.getSemE().release();
-            //nos preparamos para aceptar al proximo cliente, no se porque
-            //puse esto...igual se cambia al inicio, pero me da miedo borrarlo
-            setCliente(null);
+            
             
         } else {
             //Si el estante esta vacio se entra en un loop infinito hasta
@@ -129,6 +129,11 @@ public class Estante {
     /*Este deberia ser el put de productor consumidor, por ahora..o para el
     momento de la entrega este proceso raro el cual estoy seguro no aplica 
     productor consumidor*/
+    /**
+     * Metodo para reponer productos del estante
+     * @param empleado thread que va a usar el estante
+     * @throws InterruptedException 
+     */
     void put (Empleado empleado) throws InterruptedException {
         //Si el empleado no tiene semaforo asignado, se le asigna el semaforo
         //de su respectivo estante...me da miedo cambiar esto
@@ -161,15 +166,9 @@ public class Estante {
 
     
     
+    
     //getters y setters
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
-
+    
     public int getNroProd() {
         return nroProd;
     }

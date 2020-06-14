@@ -8,6 +8,7 @@ package Ventana;
 import java.util.concurrent.Semaphore;
 import javax.swing.JOptionPane;
 import proyectoso.Control;
+import proyectoso.Empleado;
 import proyectoso.Estante;
 
 /**
@@ -15,7 +16,9 @@ import proyectoso.Estante;
  * @author Ismenia Luces
  */
 public class Interfaz extends javax.swing.JFrame {
-Control app;
+    //Valores auxiliares
+    Control app;
+    Empleado empleado;
     Semaphore semAux;
     Estante [] estantes;
     int totalEstantes;
@@ -26,6 +29,7 @@ Control app;
         this.app = app;
         this.estantes = app.getEstantes();
         initComponents();
+        //Asignacion de valores iniciales de los contadores
         contCarritos.setText(Integer.toString(this.app.getsClientes().availablePermits()));
         carDisp.setText(Integer.toString(this.app.getsClientes().availablePermits()));
         contCajas.setText(Integer.toString(this.app.getsCajeros().availablePermits()));
@@ -41,6 +45,7 @@ Control app;
         cajOp.setText
                 (Integer.toString(this.app.getsCajeros().availablePermits()));
         totCar.setText(Integer.toString(this.app.getSucursal().getNroCarritosMax()));
+        //Fin de asignacion de valores iniciales de los contadores
         setLocationRelativeTo(null);
     }
     /**
@@ -104,22 +109,47 @@ Control app;
 
         lessCaja.setText("-");
         lessCaja.setBorder(null);
+        lessCaja.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lessCajaActionPerformed(evt);
+            }
+        });
         getContentPane().add(lessCaja, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 390, 20, -1));
 
         plusEstante.setText("+");
         plusEstante.setBorder(null);
+        plusEstante.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                plusEstanteActionPerformed(evt);
+            }
+        });
         getContentPane().add(plusEstante, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 280, 20, -1));
 
         plusCaja.setText("+");
         plusCaja.setBorder(null);
+        plusCaja.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                plusCajaActionPerformed(evt);
+            }
+        });
         getContentPane().add(plusCaja, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 390, 20, -1));
 
         plusCarrito.setText("+");
         plusCarrito.setBorder(null);
+        plusCarrito.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                plusCarritoActionPerformed(evt);
+            }
+        });
         getContentPane().add(plusCarrito, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 170, 20, -1));
 
         lessCarrito.setText("-");
         lessCarrito.setBorder(null);
+        lessCarrito.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lessCarritoActionPerformed(evt);
+            }
+        });
         getContentPane().add(lessCarrito, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 170, 20, -1));
 
         contClientes.setFont(new java.awt.Font("Malgun Gothic", 1, 18)); // NOI18N
@@ -260,20 +290,47 @@ Control app;
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
-                                      
 
-    private void plusEstanteActionPerformed(java.awt.event.ActionEvent evt) {                                            
+    
+    /**
+     * Metodo que verifica si el array x de estantes esta lleno o no
+     * @param x array de estantes a comprobar
+     * @return true si esta lleno, false si hay 1 espacio disponible
+     *  
+     * 
+     */
+    public boolean isLleno(Estante [] x){
+        for (int i = 0; i < x.length; i++) {
+            if(x[i]==null)return false;
+        }
+        return true;
+    }
+   
+    
+    private void salirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salirActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_salirActionPerformed
+
+    private void plusEstanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_plusEstanteActionPerformed
         // TODO add your handling code here:
+        //usamos el array que esta en control
         estantes = app.getEstantes();
+        //verificamos que no este lleno el array
         if(!isLleno(estantes)){
+            //se busca el primer espacio libre dentro del array
             for (int i = 0; i < estantes.length; i++) {
-                 if(estantes[i]==null){
-                     estantes[i] = new proyectoso.Estante(app.getSucursal().getCapEstantes());
-                     System.out.println("ESTANTE CREADO CON EXITO");
-                     break;
-                 }
+                if(estantes[i]==null){
+                    //se crea el estante y el empleado encargado
+                    estantes[i] = new proyectoso.Estante(app.getSucursal().getCapEstantes());
+                    empleado = new Empleado(estantes[i]);
+                    empleado.start();
+                    //salimos del for para evitar iteraciones innecesarias
+                    break;
+                }
             }
+            //se corrige el array en Control con las modificaciones
             app.setEstantes(estantes);
+            //modificamos contadores en el UI
             totalEstantes++;
             contEstante.setText(Integer.toString(totalEstantes));
             totEst.setText(Integer.toString(totalEstantes));
@@ -283,61 +340,67 @@ Control app;
             JOptionPane.showMessageDialog(null, "Se ha llegado a la capacidad\nmáxima de estantes", 
                     "CAP DE ESTANTES ALCANZADA", JOptionPane.ERROR_MESSAGE);
         }
-        
-    }                                           
+    }//GEN-LAST:event_plusEstanteActionPerformed
 
-    private void plusCajaActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // TODO add your handling code here:
-        
-        app.getsCajeros().release();
-        contCajas.setText(Integer.toString(app.getsCajeros().availablePermits()));
-    }                                        
-
-    private void lessCajaActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        try {
-            // TODO add your handling code here:
-            app.getsCajeros().acquire();
-            contCajas.setText(Integer.toString(app.getsCajeros().availablePermits()));
-        } catch (InterruptedException ex) {
-            JOptionPane.showMessageDialog(null, "ERROR boton lessCaja", 
-                    "ERROR DETECTADO", JOptionPane.ERROR_MESSAGE);
+    private void plusCarritoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_plusCarritoActionPerformed
+        // TODO add your handling code here:  
+        if(app.getsClientes().availablePermits()==app.getSucursal().getNroCarritosMax()){
+            JOptionPane.showMessageDialog(null, "No hay mas carritos en esta sucursal", 
+                    "AVISO", JOptionPane.ERROR_MESSAGE);
+        }else{
+            app.getsClientes().release();
+            contCarritos.setText(Integer.toString(app.getsClientes().availablePermits()));    
         }
-    }                                        
+            
+    
+    }//GEN-LAST:event_plusCarritoActionPerformed
 
-    private void plusCarritoActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        // TODO add your handling code here:
-        app.getsClientes().release();
-        contCarritos.setText(Integer.toString(app.getsClientes().availablePermits()));
-    }                                           
-
-    private void lessCarritoActionPerformed(java.awt.event.ActionEvent evt) {                                            
+    private void lessCarritoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lessCarritoActionPerformed
         // TODO add your handling code here:
         try {
             // TODO add your handling code here:
-            app.getsClientes().acquire();
-            contCarritos.setText(Integer.toString(app.getsClientes().availablePermits()));
+            if(app.getsClientes().availablePermits()==app.getSucursal().getNroCarritosMin()){
+                JOptionPane.showMessageDialog(null, "No puede haber 0 carritos disponibles", 
+                    "AVISO", JOptionPane.ERROR_MESSAGE);
+            } else {
+                app.getsClientes().acquire();
+                contCarritos.setText(Integer.toString(app.getsClientes().availablePermits()));
+            }
         } catch (InterruptedException ex) {
             JOptionPane.showMessageDialog(null, "ERROR boton lessCarrito", 
                     "ERROR DETECTADO", JOptionPane.ERROR_MESSAGE);
         }
-    }                                           
+    }//GEN-LAST:event_lessCarritoActionPerformed
 
-    
-    
-    
-    public boolean isLleno(Estante [] x){
-        for (int i = 0; i < x.length; i++) {
-            if(x[i]==null){
-                return false;
-            }
+    private void plusCajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_plusCajaActionPerformed
+        // TODO add your handling code here:
+        if(app.getsClientes().availablePermits()==app.getSucursal().getNroCajasMax()){
+            JOptionPane.showMessageDialog(null, "No hay mas cajas en esta sucursal", 
+                    "AVISO", JOptionPane.ERROR_MESSAGE);
+        } else{
+            app.getsCajeros().release();
+            contCajas.setText(Integer.toString(app.getsCajeros().availablePermits()));   
         }
-        return true;
-    }
-   
-    
-    private void salirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salirActionPerformed
-        System.exit(0);
-    }//GEN-LAST:event_salirActionPerformed
+        
+    }//GEN-LAST:event_plusCajaActionPerformed
+
+    private void lessCajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lessCajaActionPerformed
+        // TODO add your handling code here:
+        try {
+            // TODO add your handling code here:
+            if (app.getsCajeros().availablePermits()==app.getSucursal().getNroCajasMin()) {
+                app.getsCajeros().acquire();
+                contCajas.setText(Integer.toString(app.getsCajeros().availablePermits()));
+            }else {
+                JOptionPane.showMessageDialog(null, "No puede haber 0 cajas disponibles", 
+                    "AVISO", JOptionPane.ERROR_MESSAGE);
+            }
+            
+        } catch (InterruptedException ex) {
+            JOptionPane.showMessageDialog(null, "ERROR boton lessCaja", 
+                    "ERROR DETECTADO", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_lessCajaActionPerformed
 
     
 
