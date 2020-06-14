@@ -25,6 +25,8 @@ public class Sucursal {
             nroCarritosMin,//numero minimo de carritos, nuevamente 1
             nroCarritosMax;//numero maximo de carritos
     
+   
+    
     //Sucursal creada por datos pasados por parametro desde Archivo
     Sucursal(int tiempo,int carritosIni, int estantesIni, 
             int cajasIni,int nroCarritosMax,int nroEstantesMax,
@@ -58,6 +60,9 @@ public class Sucursal {
         this.nroCarritosMin = 1;
         this.nroCarritosMax = 20;
     }
+    
+    
+    
     
     
     //getters y setters

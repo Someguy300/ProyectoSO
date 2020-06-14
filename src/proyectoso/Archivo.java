@@ -23,6 +23,7 @@ public class Archivo {
     private String line;
     int aux, cont;
     int[]dataSuc;    
+    private boolean check;
     
     //Las librerias que nos van a ayudar a acceder al archivo para
     //leerlo o reescribirlo
@@ -85,7 +86,7 @@ public class Archivo {
         del txt sin problema. 
         En caso de haber algun problema creando la sucursal a partir de
         los datos del txt se crea una sucursal con datos por defecto*/
-        if(cont==8){
+        if(cont==8 && verificacion(dataSuc)){
             //trycatch por si las moscas
             try {
                 System.out.println("ARCHIVO CARGADO CON EXITO");
@@ -96,7 +97,7 @@ public class Archivo {
                 sucursal = new Sucursal();
             }
         }else{
-            System.out.println("ERROR EN ARCHIVO,CONT INCOMPLETO, CARGANDO DEFAULT");
+            System.out.println("ERROR EN ARCHIVO, CARGANDO DEFAULT");
             sucursal = new Sucursal();
         }
             
@@ -135,4 +136,24 @@ public class Archivo {
         }
         
     }
+    
+    
+    public boolean verificacion(int [] data){
+        check = true;
+            for (int i = 0; i < data.length-1; i++) {
+                if(data[i]<1){
+                    check=false;
+                    break;
+                }
+            }
+            if(check!=false){
+                if(data[data.length-1]<3)check = false;
+                if(data[1]>data[4])check=false;
+                if(data[2]>data[5])check=false;
+                if(data[3]>data[6])check=false;
+            }
+        return check;
+    }
+    
+    
 }

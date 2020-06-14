@@ -5,6 +5,7 @@
  */
 package proyectoso;
 
+import Ventana.Interfaz;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -23,6 +24,7 @@ public class ProyectoSO {
         ir primero a Control, despues de eso se convierte en ir clase
         por clase viendo los comentarios*/
         Control app = new Control();
+        new Interfaz(app).setVisible(true);
         app.iniciar();
         
                 

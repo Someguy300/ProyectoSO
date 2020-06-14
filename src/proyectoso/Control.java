@@ -5,116 +5,205 @@
  */
 package proyectoso;
 
+import Ventana.Interfaz;
 import java.util.concurrent.Semaphore;
 
-
-/**
- *
- * @author Jesus Barrios
- */
 public class Control {
-    //Variables iniciales
-    //Semaforos de carritos y cajeros
-    Semaphore sClientes, sCajeros;
-    //Array que va a tener los estantes
-    Estante [] estantes;
-    //Clase que maneja el cargado de datos del archivo txt
-    Archivo archivo;
-    //Donde se van a guardar los datos del archivo para ejecutar el programa
-    Sucursal sucursal;
-    //Clase que va a recorrer la sucursal
-    Cliente cliente;
-    //Clase que vigila los estantes
-    Empleado empleado;
-    //Clase encargada del contador de horas
-    Jefe jefe;
-    //Clase encargada de hacer reset al contador de horas y ganancias
-    Gerente gerente;
-    //Variables auxiliares y ganancias, hay que implmentar el contador global
-    int aux,cont,ganancias;
-    //Int estatico, es el equivalente a un minuto en tiempo del programa
-    //calculado del tiempo en el txt
-    static int minuto;
-    
-    
-    public Control() throws InterruptedException{
-        //Instanciacion de las clases
-        this.jefe = new Jefe();
-        this.gerente = new Gerente(jefe);
-        this.archivo = new Archivo();
-        this.sucursal = archivo.cargarData();
-        /*Aqui se realiza el calculo de cuanto es un minuto en tiempo del programa
-        Si desde el archivo nos pasan el equivalente en segundos a una hora
-        entonces se divide ese tiempo entre 60 para tener un minuto y *1000
-        para hacer la transformacion a microsegundos*/
-        Control.minuto = (sucursal.getTiempo()/60)*1000;
-      
-        this.estantes = new Estante[sucursal.getNroEstantesMax()];
-        this.sClientes = new Semaphore(sucursal.getNroCarritosMax(),true);
-        this.sCajeros = new Semaphore(sucursal.getNroCajasMax(),true);
-        
-        //Se crean los estantes iniciales de acuerdo a lo establecido en el txt
-        for (int i = 0; i < sucursal.getEstantesIni(); i++) {
-            estantes[i] = new Estante(sucursal.getCapEstantes());
-        }
-        //Se bloquea el acceso a los semaforos dependiendo del numero de
-        //carritos/cajas iniciales establecidas en el txt
-        aux = sucursal.getNroCarritosMax() - sucursal.getCarritosIni();
-        sClientes.acquire(aux);
-        aux = sucursal.getNroCajasMax() - sucursal.getCajasIni();
-        sCajeros.acquire(aux);
-        
-        //Verificaciones, pueden ser borradas o comentadas
-        System.out.println("Carritos disponibles "+sClientes.availablePermits());
-        System.out.println("Cajas abiertos "+sCajeros.availablePermits());
-        
-        
-        
-    }
-    
-    
-    
-    
-    public void iniciar(){
-        //Auxiliar para darle un id a los clientes que se crean
-        cont = 1;
-        //Se crean e inician los empleados que van a manejar los estantes.
-        for (int i = 0; i < sucursal.getEstantesIni(); i++) {
-            empleado = new Empleado(estantes[i]);
-            empleado.start();
-        }
-        // Se inicia al jefe y al gerente para dar inicio al contador de horas
-        jefe.start();
-        gerente.start();
-        //Creacion  y start de los clientes, para mas detalles ir a Cliente
-        //es un loop infinito asi que esto no para hasta que se detenga el programa
-        do {
-            cliente = new Cliente(cont, sClientes, sCajeros, estantes);
-            cliente.start();
-            cont++;
-            try {
-                //Los clientes se crean c/5 min
-                Thread.sleep(Control.minuto*5);
-            } catch (InterruptedException ex) {
-                System.out.println("ERROR INICIAR");
-            }
-            //Pense que seria bonito poner el recolector un recolector de basura aqui...
-            System.gc();
-        } while (true);
-        
-    }
-
-    public int getGanancias() {
-        return ganancias;
-    }
-
-    public void setGanancias(int ganancias) {
-        this.ganancias = ganancias;
-    }
-    
-    
-    
-    
-    
-   
+  Semaphore sClientes;
+  
+  Semaphore sCajeros;
+  
+  Estante[] estantes;
+  
+  Archivo archivo;
+  
+  Sucursal sucursal;
+  
+  Cliente cliente;
+  
+  Empleado empleado;
+  
+  Jefe jefe;
+  
+  Gerente gerente;
+  
+  int aux;
+  
+  int cont;
+  
+  int ganancias;
+  
+  static int minuto;
+  
+  static int carDisp;
+  
+  static int cajDisp;
+  
+  public Control() throws InterruptedException {
+    this.jefe = new Jefe();
+    this.gerente = new Gerente(this.jefe);
+    this.archivo = new Archivo();
+    this.sucursal = this.archivo.cargarData();
+    minuto = this.sucursal.getTiempo() / 60 * 1000;
+    this.estantes = new Estante[this.sucursal.getNroEstantesMax()];
+    this.sClientes = new Semaphore(this.sucursal.getNroCarritosMax(), true);
+    this.sCajeros = new Semaphore(this.sucursal.getNroCajasMax(), true);
+    for (int i = 0; i < this.sucursal.getEstantesIni(); i++)
+      this.estantes[i] = new Estante(this.sucursal.getCapEstantes()); 
+    carDisp = this.sucursal.getNroCarritosMax() - this.sucursal.getCarritosIni();
+    this.sClientes.acquire(carDisp);
+    cajDisp = this.sucursal.getNroCajasMax() - this.sucursal.getCajasIni();
+    this.sCajeros.acquire(cajDisp);
+    System.out.println("Carritos disponibles " + this.sClientes.availablePermits());
+    System.out.println("Cajas abiertos " + this.sCajeros.availablePermits());
+  }
+  
+  public void iniciar() {
+    this.cont = 1;
+    for (int i = 0; i < this.sucursal.getEstantesIni(); i++) {
+      this.empleado = new Empleado(this.estantes[i]);
+      this.empleado.start();
+    } 
+    this.jefe.start();
+    this.gerente.start();
+    while (true) {
+      try {
+        Thread.sleep((minuto * 5));
+      } catch (InterruptedException ex) {
+        System.out.println("ERROR INICIAR");
+      } 
+      this.cliente = new Cliente(this.cont, this.sClientes, this.sCajeros, this.estantes);
+      this.cliente.start();
+      this.cont++;
+      updateInterfaz();
+      System.gc();
+    } 
+  }
+  
+  public void updateInterfaz() {
+    Interfaz.clAf
+      .setText(Integer.toString(this.sClientes.getQueueLength()));
+    Interfaz.cajOp
+      .setText(Integer.toString(this.sCajeros.availablePermits()));
+  }
+  
+  public Semaphore getsClientes() {
+    return this.sClientes;
+  }
+  
+  public int getCarDisp() {
+    return carDisp;
+  }
+  
+  public void setCarDisp(int carDisp) {
+    Control.carDisp = carDisp;
+  }
+  
+  public int getCajDisp() {
+    return cajDisp;
+  }
+  
+  public void setCajDisp(int cajDisp) {
+    Control.cajDisp = cajDisp;
+  }
+  
+  public void setsClientes(Semaphore sClientes) {
+    this.sClientes = sClientes;
+  }
+  
+  public Semaphore getsCajeros() {
+    return this.sCajeros;
+  }
+  
+  public void setsCajeros(Semaphore sCajeros) {
+    this.sCajeros = sCajeros;
+  }
+  
+  public Estante[] getEstantes() {
+    return this.estantes;
+  }
+  
+  public void setEstantes(Estante[] estantes) {
+    this.estantes = estantes;
+  }
+  
+  public Archivo getArchivo() {
+    return this.archivo;
+  }
+  
+  public void setArchivo(Archivo archivo) {
+    this.archivo = archivo;
+  }
+  
+  public Sucursal getSucursal() {
+    return this.sucursal;
+  }
+  
+  public void setSucursal(Sucursal sucursal) {
+    this.sucursal = sucursal;
+  }
+  
+  public Cliente getCliente() {
+    return this.cliente;
+  }
+  
+  public void setCliente(Cliente cliente) {
+    this.cliente = cliente;
+  }
+  
+  public Empleado getEmpleado() {
+    return this.empleado;
+  }
+  
+  public void setEmpleado(Empleado empleado) {
+    this.empleado = empleado;
+  }
+  
+  public Jefe getJefe() {
+    return this.jefe;
+  }
+  
+  public void setJefe(Jefe jefe) {
+    this.jefe = jefe;
+  }
+  
+  public Gerente getGerente() {
+    return this.gerente;
+  }
+  
+  public void setGerente(Gerente gerente) {
+    this.gerente = gerente;
+  }
+  
+  public int getAux() {
+    return this.aux;
+  }
+  
+  public void setAux(int aux) {
+    this.aux = aux;
+  }
+  
+  public int getCont() {
+    return this.cont;
+  }
+  
+  public void setCont(int cont) {
+    this.cont = cont;
+  }
+  
+  public static int getMinuto() {
+    return minuto;
+  }
+  
+  public static void setMinuto(int minuto) {
+    Control.minuto = minuto;
+  }
+  
+  public int getGanancias() {
+    return this.ganancias;
+  }
+  
+  public void setGanancias(int ganancias) {
+    this.ganancias = ganancias;
+  }
 }
