@@ -114,18 +114,18 @@ public class Archivo {
         if(cont==8 && verificacion(dataSuc)){
             //trycatch por si las moscas
             try {
-                System.out.println("ARCHIVO CARGADO CON EXITO");
+                //System.out.println("ARCHIVO CARGADO CON EXITO");
                 sucursal = new Sucursal(dataSuc[0],dataSuc[1], dataSuc[2], 
                     dataSuc[3], dataSuc[4], dataSuc[5], dataSuc[6], dataSuc[7]);
             } catch (Exception e) {
-                System.out.println("ERROR EN ARCHIVO, CARGANDO DEFAULT");
+                //System.out.println("ERROR EN ARCHIVO, CARGANDO DEFAULT");
                 JOptionPane.showMessageDialog(null, "Error al leer el archivo,cargando datos por defecto '" 
                     + nombreArchivo + "'", "NO SE PUDO LEER EL ARCHIVO", 
                     JOptionPane.ERROR_MESSAGE);
                 sucursal = new Sucursal();
             }
         }else{
-            System.out.println("ERROR EN ARCHIVO, CARGANDO DEFAULT");
+            //System.out.println("ERROR EN ARCHIVO, CARGANDO DEFAULT");
             JOptionPane.showMessageDialog(null, "Error al leer el archivo,cargando datos por defecto '" 
                     + nombreArchivo + "'", "NO SE PUDO LEER EL ARCHIVO", 
                     JOptionPane.ERROR_MESSAGE);

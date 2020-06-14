@@ -59,8 +59,8 @@ public class Estante {
             
             
             
-            System.out.println("-----------------");
-            System.out.println(cliente.getNro()+" dice: Estoy en el estante");
+//            System.out.println("-----------------");
+//            System.out.println(cliente.getNro()+" dice: Estoy en el estante");
 
             //el tiempo que usa el cliente para decidir que va a agarrar
             cliente.sleep(Control.minuto);
@@ -72,7 +72,9 @@ public class Estante {
                 case 1:
                     randomInt = (int)(2 * Math.random());
                     cliente.setNroItems(cliente.getNroItems()+randomInt);
-                    System.out.println(cliente.getNro()+" dice: agarre "+randomInt+" productos");
+                    
+                    //System.out.println(cliente.getNro()+" dice: agarre "+randomInt+" productos");
+                    
                     nroProd = nroProd - randomInt;
                     if(randomInt!=0){
                         randomCost= 1 + ((int)(10 * Math.random()));
@@ -88,14 +90,17 @@ public class Estante {
                     tiene es inutil...¿tiene algo que ver con el enunciado
                     del proyecto?*/
                     cliente.setNroItems(cliente.getNroItems()+randomInt);
+                    
                     //sout de verificacion
-                    System.out.println(cliente.getNro()+" dice: agarre "+randomInt+" productos");
+                    //System.out.println(cliente.getNro()+" dice: agarre "+randomInt+" productos");
+                    
                     /*Aqui si es importante el randomInt porque se le resta al
                     total de productos que le quedan al estante despues de que
                     el cliente agarro*/
                     nroProd = nroProd - randomInt;
                     //Si el cliente agarro productos aqui se le asigna el 
                     //precio a c/producto que agarro el cliente
+                    
                     if(randomInt!=0){
                         for (int i = 0; i < randomInt; i++) {
                             //Se inventa el precio
@@ -108,8 +113,9 @@ public class Estante {
                     break;
             }
             //verificacion
-            System.out.println("-----------------");
-            System.out.println("PRODUCTOS RESTANTES:"+nroProd);
+//            System.out.println("-----------------");
+//            System.out.println("PRODUCTOS RESTANTES:"+nroProd);
+            
             //el cliente deja ir el semaforo
             cliente.getSemE().release();
             
@@ -118,7 +124,7 @@ public class Estante {
             //Si el estante esta vacio se entra en un loop infinito hasta
             //que el empleado rellene el estante,luego de eso se vuelve a llamar
             //a la funcion
-            System.out.println(cliente.getNro()+" dice: Estante vacio,esperare");
+            //System.out.println(cliente.getNro()+" dice: Estante vacio,esperare");
             while(nroProd==0){}
             get(cliente);
         }
@@ -145,20 +151,24 @@ public class Estante {
         //para el empleado vaya a buscar una caja se ejecuta esto
         if(nroProd<=(cap-3)){
             //verificando que el thread empleado funcione
-            System.out.println("Empleado dice: Oh no el estante tiene que ser repuesto");
+            //System.out.println("Empleado dice: Oh no el estante tiene que ser repuesto");
+            
             //buscando la caja...
             Thread.sleep(Control.minuto*4);
             //se pide permiso para usar el estante
             empleado.getSem().acquire();
+            
             //El minuto en el que se repone el estante+verificacion por cout
-            System.out.println("Empleado dice: reponiendo estante");
+            //System.out.println("Empleado dice: reponiendo estante");
             empleado.sleep(Control.minuto);
+            
             //Se repone el estante
-            System.out.println("Empleado dice: Estante repuesto con 3 productos");
+            //System.out.println("Empleado dice: Estante repuesto con 3 productos");
             nroProd = nroProd + 3;
+            
             //verificacion+se suelta el permiso para usar el semaforo 
             //del estante...me sigo preguntando si eso esta bien dicho
-            System.out.println("PRODUCTOS RESTANTES: "+nroProd);
+            //System.out.println("PRODUCTOS RESTANTES: "+nroProd);
             empleado.getSem().release();
         } 
         

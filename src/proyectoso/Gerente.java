@@ -6,6 +6,7 @@
 package proyectoso;
 
 import Ventana.Interfaz;
+import javax.swing.JOptionPane;
 
 public class Gerente extends Thread {
   /*Clase gerente, su unica utilidad es "resetear" los contadores de horas
@@ -25,7 +26,7 @@ public class Gerente extends Thread {
   @Override
     public void run() {
         //sout de verificacion
-        System.out.println("GERENTE ACTIVO");
+        //System.out.println("GERENTE ACTIVO");
         //trycatch obligatorio 
         try {
             //loop infinito
@@ -34,7 +35,7 @@ public class Gerente extends Thread {
                 if(this.jefe.getHoras() == 8) {
                     this.jefe.setHoras(0);
                     Interfaz.horas.setText("0");
-                    System.out.println("Gerente dice: reset a " + this.jefe.getHoras() + " horas");
+                    //System.out.println("Gerente dice: reset a " + this.jefe.getHoras() + " horas");
                     Interfaz.ganancias.setText("0");
                 } 
                 //si se quita esto el programa va a dejar de ejecutar
@@ -42,7 +43,8 @@ public class Gerente extends Thread {
                 Thread.sleep(100);
             } 
         } catch (InterruptedException ex) {
-            System.out.println("gerente se dio a la fuga");
+            JOptionPane.showMessageDialog(null, "InterruptedException gerente", 
+                    "ERROR", JOptionPane.ERROR_MESSAGE);
 
         } 
     }

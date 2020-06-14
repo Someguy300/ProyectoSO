@@ -2,6 +2,7 @@ package proyectoso;
 
 import Ventana.Interfaz;
 import java.util.concurrent.Semaphore;
+import javax.swing.JOptionPane;
 
 public class Cliente extends Thread {
     /*NOTA: todos los System.out.print en esta clase son para testing
@@ -63,8 +64,8 @@ public class Cliente extends Thread {
     public void run() {
       try {
           //Si no hay carritos disponibles para entrar al super, avisa
-        if (this.semC.availablePermits() == 0)
-          System.out.println(this.nro + " dice: No hay carritos, voy a esperar"); 
+//        if (this.semC.availablePermits() == 0)
+//            System.out.println(this.nro + " dice: No hay carritos, voy a esperar"); 
         entra();
         //Estoy seguro que hay un metodo mas efectivo para hacer esto pero no se me ocurre
         /*Desde aqui hasta donde dice HASTA AQUI es para modificar los contadores
@@ -86,13 +87,13 @@ public class Cliente extends Thread {
         Interfaz.carDisp
           .setText(Integer.toString(Integer.parseInt(Interfaz.carDisp.getText()) - 1));
         //HASTA AQUI HASTA AQUI HASTA AQUI
-        System.out.println(this.nro + " dice: agarre un carrito");
+       // System.out.println(this.nro + " dice: agarre un carrito");
         
         //El cliente recorre los estantes uno por uno
         for (int i = 0; i < this.estantes.length; i++) {
             if (this.estantes[i] != null) {
-              System.out.println("-----------------");
-              System.out.println(this.nro + " dice: voy al estante " + this.contE);
+//              System.out.println("-----------------");
+//              System.out.println(this.nro + " dice: voy al estante " + this.contE);
               //Tomando en cuena que tarda 5 min en llegar a cualquier estante
               Thread.sleep((Control.minuto * 5));
               this.estantes[i].get(this);
@@ -102,26 +103,33 @@ public class Cliente extends Thread {
             }
         } 
         
-        System.out.println("-----------------");
-        System.out.println(this.nro + " dice: Voy a caja");
-        System.out.println("-----------------");
+//        System.out.println("-----------------");
+//        System.out.println(this.nro + " dice: Voy a caja");
+//        System.out.println("-----------------");
+
         /*Creo que en el enunciado del proyecto nunca de hablo
         de cuanto tarda el cliente en llegar a caja y no queria que
         el cliente llegara de inmediato asi que asumo que tarda lo mismo
         que con lo que los estantes: 5 min en llegar a cualquier lado*/
         Thread.sleep((Control.minuto * 5));
-        if (this.semP.availablePermits() == 0)
-          System.out.println(this.nro + " dice: Hay gente pagando, voy a esperar"); 
+        
+//        if (this.semP.availablePermits() == 0)
+//          System.out.println(this.nro + " dice: Hay gente pagando, voy a esperar"); 
+
         //Pide permiso para usar el semaforo
         this.semP.acquire();
-        System.out.println(this.nro + " dice: estoy pagando mis " + this.nroItems + " productos");
-        System.out.println("-----------------");
+        
+//        System.out.println(this.nro + " dice: estoy pagando mis " + this.nroItems + " productos");
+//        System.out.println("-----------------");
+
         //Creo que esta formula esta bien, es el medio segundo que tarda
         //en poner todos sus objetos en el mostrador
         Thread.sleep((this.nroItems * Control.minuto / 60 / 2));
         //y el minuto que tarda el cajero en hacer la factura
         Thread.sleep(Control.minuto);
-        System.out.println(this.nro + " dice: pague " + this.total + "$");
+        
+        //System.out.println(this.nro + " dice: pague " + this.total + "$");
+        
         /*A proposito se que es el cajero el que hace esto pero no sabia como
         hacerlo..lo que se me ocurrio es hacer una clase cajero extends Thread
         que hiciera eso pero entonces tendria que hacerlo como hice los estantes
@@ -137,9 +145,11 @@ public class Cliente extends Thread {
         //Se modifican mas contadores en la interfaz
         Interfaz.clDes
           .setText(Integer.toString(Integer.parseInt(Interfaz.clDes.getText()) + 1));
-        System.out.println("-----------------");
-        System.out.println(this.nro + " dice: ya pague, voy a dejar el carrito");
-        System.out.println("-----------------");
+        
+//        System.out.println("-----------------");
+//        System.out.println(this.nro + " dice: ya pague, voy a dejar el carrito");
+//        System.out.println("-----------------");
+        
         //Los 2 min que tarda el cliente en dejar el carrito
         Thread.sleep((Control.minuto * 2));
         //deja ir el carritos
@@ -154,14 +164,15 @@ public class Cliente extends Thread {
         Interfaz.contClientes
               .setText(Integer.toString(Integer.parseInt(Interfaz.contClientes.getText()) - 1));
         
-        
         //Verificaciones
-        System.out.println(this.nro + " dice: solte el carrito,adios");
-        System.out.println("-----------------");
+//        System.out.println(this.nro + " dice: solte el carrito,adios");
+//        System.out.println("-----------------");
+        
         //Esperamos a que el thread muera
         join();
       } catch (InterruptedException e) {
-        System.out.println("El cliente se volviloco.");
+            JOptionPane.showMessageDialog(null, "InterruptedException cliente", 
+                    "ERROR", JOptionPane.ERROR_MESSAGE);
       } 
     }
     
@@ -170,8 +181,8 @@ public class Cliente extends Thread {
      */
     private void entra() {
       if (this.nuevo) {
-        System.out.println("El cliente " + this.nro + " entral sistema.");
-        System.out.println("-----------------");
+//        System.out.println("El cliente " + this.nro + " entral sistema.");
+//        System.out.println("-----------------");
         this.nuevo = false;
       } 
     }

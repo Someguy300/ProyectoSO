@@ -7,6 +7,7 @@ package proyectoso;
 
 import Ventana.Interfaz;
 import java.util.concurrent.Semaphore;
+import javax.swing.JOptionPane;
 
 public class Control {
     /*Clase control, nuestro "main",por asi decirlo,
@@ -93,9 +94,10 @@ public class Control {
         this.sClientes.acquire(carDisp);
         cajDisp = this.sucursal.getNroCajasMax() - this.sucursal.getCajasIni();
         this.sCajeros.acquire(cajDisp);
+        
         //Verificaciones
-        System.out.println("Carritos disponibles " + this.sClientes.availablePermits());
-        System.out.println("Cajas abiertos " + this.sCajeros.availablePermits());
+        //System.out.println("Carritos disponibles " + this.sClientes.availablePermits());
+        //System.out.println("Cajas abiertos " + this.sCajeros.availablePermits());
     }
     
     /**
@@ -120,7 +122,8 @@ public class Control {
           try {
             Thread.sleep((minuto * 5));
           } catch (InterruptedException ex) {
-            System.out.println("ERROR INICIAR");
+            JOptionPane.showMessageDialog(null, "InterruptedException control", 
+                    "ERROR", JOptionPane.ERROR_MESSAGE);
           } 
           this.cliente = new Cliente(this.cont, this.sClientes, this.sCajeros, this.estantes);
           this.cliente.start();

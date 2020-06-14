@@ -8,6 +8,7 @@ package proyectoso;
 import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -32,7 +33,7 @@ public class Empleado extends Thread {
     @Override
     public void run(){
         //verificacion para ver si el thread del empleado esta funcionando
-        System.out.println("EMPLEADO ACTIVO");
+        //System.out.println("EMPLEADO ACTIVO");
         /*Se me olvido que no se pueden borrar estantes asi que por eso
         el while dice eso, se puede cambiar a true*/
         do {            
@@ -44,7 +45,8 @@ public class Empleado extends Thread {
                 Thread.sleep(100);
                 estante.put(this);
             } catch (InterruptedException ex) {
-                System.out.println("ERROR");
+                JOptionPane.showMessageDialog(null, "InterruptedException empleado", 
+                    "ERROR", JOptionPane.ERROR_MESSAGE);
             }
         } while (estante!=null);
         
