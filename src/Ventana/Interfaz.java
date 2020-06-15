@@ -344,7 +344,7 @@ public class Interfaz extends javax.swing.JFrame {
 
     private void plusCarritoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_plusCarritoActionPerformed
         // TODO add your handling code here:  
-        if(app.getsClientes().availablePermits()==app.getSucursal().getNroCarritosMax()){
+        if(app.getsClientes().availablePermits()>(app.getSucursal().getNroCarritosMax()-Control.limCar)){
             JOptionPane.showMessageDialog(null, "No hay mas carritos en esta sucursal", 
                     "AVISO", JOptionPane.ERROR_MESSAGE);
         }else{
@@ -360,7 +360,7 @@ public class Interfaz extends javax.swing.JFrame {
         // TODO add your handling code here:
         try {
             // TODO add your handling code here:
-            if(app.getsClientes().availablePermits()==app.getSucursal().getNroCarritosMin()){
+            if(app.getsClientes().availablePermits()<app.getSucursal().getNroCarritosMin()+Control.limCar){
                 JOptionPane.showMessageDialog(null, "No puede haber 0 carritos disponibles", 
                     "AVISO", JOptionPane.ERROR_MESSAGE);
             } else {
@@ -376,7 +376,7 @@ public class Interfaz extends javax.swing.JFrame {
 
     private void plusCajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_plusCajaActionPerformed
         // TODO add your handling code here:
-        if(app.getsCajeros().availablePermits()==app.getSucursal().getNroCajasMax()){
+        if(app.getsCajeros().availablePermits()>app.getSucursal().getNroCajasMax()-Control.limCaj){
             JOptionPane.showMessageDialog(null, "No hay mas cajas en esta sucursal", 
                     "AVISO", JOptionPane.ERROR_MESSAGE);
         } else{
@@ -390,7 +390,7 @@ public class Interfaz extends javax.swing.JFrame {
     private void lessCajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lessCajaActionPerformed
         // TODO add your handling code here:
         try {
-            if (app.getsCajeros().availablePermits()==app.getSucursal().getNroCajasMin()) {
+            if (app.getsCajeros().availablePermits()<app.getSucursal().getNroCajasMin()+Control.limCaj) {
                 JOptionPane.showMessageDialog(null, "No puede haber 0 cajas disponibles", 
                     "AVISO", JOptionPane.ERROR_MESSAGE);
             }else {

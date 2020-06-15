@@ -56,7 +56,7 @@ public class Control {
     static int carDisp;
     //cajas disponibles 
     static int cajDisp;
-    static int maxCar,maxCaj;
+    public static int maxCar,maxCaj,limCar,limCaj;
 
     
     public Control() throws InterruptedException {
@@ -94,7 +94,8 @@ public class Control {
         this.sClientes.acquire(carDisp);
         cajDisp = this.sucursal.getNroCajasMax() - this.sucursal.getCajasIni();
         this.sCajeros.acquire(cajDisp);
-        
+        limCar=0;
+        limCaj=0;
         //Verificaciones
         //System.out.println("Carritos disponibles " + this.sClientes.availablePermits());
         //System.out.println("Cajas abiertos " + this.sCajeros.availablePermits());
@@ -141,9 +142,9 @@ public class Control {
     //Originalmente pense que este metodo actualizaria mas contadores
     public void updateInterfaz() {
       Interfaz.clAf
-        .setText(Integer.toString(this.sClientes.getQueueLength()));
+        .setText(Integer.toString(sClientes.getQueueLength()));
       Interfaz.cajOp
-        .setText(Integer.toString(this.sCajeros.availablePermits()));
+        .setText(Integer.toString(sCajeros.availablePermits()));
     }
     
     
